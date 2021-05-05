@@ -1,0 +1,46 @@
+export const validadorCei = (cei: string | null) => {
+
+  if(!cei) return false
+  // REGRAS DE VALIDAÇÃO DO CEI:
+  // 1º a- Extraímos os 11 primeiros dígitos do CEI
+  let numero = cei.substring(0, 11);
+
+  // 1º b- Multiplicamos cada dígito pelo seu peso
+  let soma =
+    parseInt(numero.substring(0, 1), 0) * 7 +
+    parseInt(numero.substring(1, 2), 0) * 4 +
+    parseInt(numero.substring(2, 3), 0) * 1 +
+    parseInt(numero.substring(3, 4), 0) * 8 +
+    parseInt(numero.substring(4, 5), 0) * 5 +
+    parseInt(numero.substring(5, 6), 0) * 2 +
+    parseInt(numero.substring(6, 7), 0) * 1 +
+    parseInt(numero.substring(7, 8), 0) * 6 +
+    parseInt(numero.substring(8, 9), 0) * 3 +
+    parseInt(numero.substring(9, 10), 0) * 7 +
+    parseInt(numero.substring(10, 11), 0) * 4;
+
+  let f = soma.toString().length;
+
+  // 2º - Somamos o dígito da dezena com o dígito da unidade da SOMA
+  let total =
+    parseInt(soma.toString().substring(f - 2, f - 1), 10) +
+    parseInt(soma.toString().substring(f - 1, f), 10);
+
+  f = total.toString().length;
+
+  // 3º - Subtraímos de 10 o dígito da unidade do TOTAL
+  let resultado = 10 - parseInt(total.toString().substring(f - 1, f), 10);
+
+  f = resultado.toString().length;
+
+  // 4º - Extraímos o dígito da unidade do RESULTADO
+  let unidadeResultado = parseInt(resultado.toString().substring(f - 1, f), 10);
+
+  // 5º - Se o CEI fornecido tiver 12 dígitos e seu último dígito for igual à unidadeResultado, ele é validado
+  if (
+    cei.length === 12 &&
+    unidadeResultado === parseInt(cei.substring(11, 12), 10)
+  ) {
+    return true;
+  } else return false;
+};
